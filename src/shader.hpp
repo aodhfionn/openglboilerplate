@@ -1,7 +1,7 @@
-#pragma once
+#ifndef SHADER_HPP
+#define SHADER_HPP
 
 #include <glad/glad.h>
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -32,3 +32,5 @@ class Shader
     private:
         void loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource);
 };
+
+#endif // SHADER_HPP

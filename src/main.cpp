@@ -80,8 +80,15 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind buffer
     glBindVertexArray(0); // unbind vertex array
 
+    // input handler
+
+    InputHandler input;
+
     // loop
     while (!glfwWindowShouldClose(window)) {
+
+        input.processInput(&input);
+
         glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
