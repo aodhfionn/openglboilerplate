@@ -33,18 +33,18 @@ void checkCompileErrors(unsigned int shader, bool isProgram) {
     }
 }
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath) {
+Shader::Shader(const char* vertexShaderSource, const char* fragmentShaderSource) {
+    loadShaders(vertexShaderSource, fragmentShaderSource);
+}
+
+Shader::Shader(std::ifstream vShaderFile, std::ifstream fShaderFile) {
     std::string vertexCode;
     std::string fragmentCode;
-    std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
     
     vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
    
     try {
-        vShaderFile.open(vertexPath);
-        fShaderFile.open(fragmentPath);
         std::stringstream vShaderStream, fShaderStream;
 
         // write from file to streams
@@ -60,19 +60,20 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
         fShaderFile.close();
         
     } catch (std::ifstream::failure exception) {
-        std::string vpath(vertexPath);
-        std::string fpath(fragmentPath);
-
-        std::cerr << ("Could not load shader from source: vert: " + vpath + " frag: " + fpath) << std::endl;
+        std::cerr << "Could not load shader from source file" << std::endl;
     }
 
     // to cstring
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 
+    loadShaders(vShaderCode, fShaderCode);
+}
+
+void Shader::loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource) {
     // compile shaders
-    vertexID = compileShader(vShaderCode, GL_VERTEX_SHADER);
-    fragmentID = compileShader(fShaderCode, GL_FRAGMENT_SHADER);
+    vertexID = compileShader(vertexShaderSource, GL_VERTEX_SHADER);
+    fragmentID = compileShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
     checkCompileErrors(vertexID, false);
     checkCompileErrors(fragmentID, false);

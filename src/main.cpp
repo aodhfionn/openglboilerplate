@@ -46,7 +46,9 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // load shaders
-    Shader shader("src/shaders/default.vert", "src/shaders/default.frag");
+    Shader shader(
+        "#version 330 core\n\nlayout (location = 0) in vec3 pos;\nlayout (location = 1) in vec3 aColor;\n\nout vec3 Color;\n\nvoid main()\n{\ngl_Position = vec4(pos, 1.0);\nColor = aColor;\n}\0",
+        "#version 330 core\n\nin vec3 Color;\n\nout vec4 FragColor;\n\nvoid main()\n{\nFragColor = vec4(Color, 1.0);\n}\n\0");
 
     // VBO & VBA
     float vertices[] = {

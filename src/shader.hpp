@@ -13,8 +13,9 @@ class Shader
         unsigned int vertexID;
         unsigned int fragmentID;
 
-        //constructor 
-        Shader(const char* vertexPath, const char* fragmentPath);
+        //constructor
+        Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
+        Shader(std::ifstream vertexStream, std::ifstream fragmenStream);
         ~Shader();
 
         void use();
@@ -27,4 +28,7 @@ class Shader
     
         // template<typename T>
         // void setVal(const std::string &name, T value) const;
+    
+    private:
+        void loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource);
 };
