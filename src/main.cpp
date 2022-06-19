@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "shader.hpp"
+#include "input.hpp"
 
 void initGLFW() {
     // init glfw
@@ -18,6 +19,18 @@ void initGLFW() {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+void onKeyGPress() {
+    std::cout << "G pressed" << std::endl;
+}
+
+void onKeyGDown() {
+    std::cout << "G down" << std::endl;
+}
+
+void onKeyGUp() {
+    std::cout << "G up" << std::endl;
 }
 
 int main() {
@@ -81,13 +94,15 @@ int main() {
     glBindVertexArray(0); // unbind vertex array
 
     // input handler
+    InputHandler input(window);
 
-    InputHandler input;
+    input.registerKeyDownCallback(GLFW_KEY_G, onKeyGPress);
+    input.registerKeyUpCallback(GLFW_KEY_G, onKeyGUp);
+    input.registerKeyWhileDownCallback(GLFW_KEY_G, onKeyGDown);
 
     // loop
     while (!glfwWindowShouldClose(window)) {
-
-        input.processInput(&input);
+        input.processInput();
 
         glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

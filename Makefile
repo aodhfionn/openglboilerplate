@@ -8,3 +8,5 @@ clean:
 
 test: build
 	./$(OUTPUT)
+
+.PHONY: build clean test
