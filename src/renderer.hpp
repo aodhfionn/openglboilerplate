@@ -4,26 +4,33 @@
 #include <iostream>
 #include <vector>
 
-enum RendererMode
-{
-    XYZ,
-    XYZ_RGBA
-};
-
 class Renderer
 {
     public:
-        void begin(int mode, RendererMode renderMode);
-        void pos(float x, float y, float z);
-        void clr(float r, float g, float b, float a);
+        RenderVertex *current;
+
+        Renderer();
+
+        void begin(int mode);
+        Renderer* pos(float x, float y, float z);
+        Renderer* clr(float r, float g, float b, float a);
         void endVertex();
-        void draw();
+        void render();
 
     private:
         int mode;
-        RendererMode format;
+};
+
+class RenderVertex {
+    public:
+        unsigned int vbo, vao;
+        int type;
+
+        RenderVertex(int type);
+        ~RenderVertex();
+
+        void render();
         std::vector<float> vertexBuffer;
-        std::vector<float> buffer;
 };
 
 #endif

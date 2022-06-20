@@ -9,16 +9,20 @@
 class Shader
 {
     public:
-        unsigned int programID;
-        unsigned int vertexID;
-        unsigned int fragmentID;
+
+        unsigned int programID,
+                     vertexID,
+                     fragmentID;
 
         //constructor
-        Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
-        Shader(std::ifstream vertexStream, std::ifstream fragmenStream);
+        //Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
+        //Shader(std::ifstream vertexStream, std::ifstream fragmenStream);
         ~Shader();
 
         void use();
+
+        void loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource);
+        unsigned int Compile(const char* shaderSource, int type);
     
         //TODO: use template here
         void setBool(const std::string &name, bool value) const;
@@ -30,7 +34,7 @@ class Shader
         // void setVal(const std::string &name, T value) const;
     
     private:
-        void loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource);
+        void checkCompileErrors(unsigned int shader, bool isProgram);
 };
 
 #endif // SHADER_HPP
