@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 namespace util
 {
@@ -14,13 +13,11 @@ namespace util
         unsigned int i;
         for (auto& element : vector) {
             if (element == desired) return i;
-
             i++;
         }
 
         return -1;
     }
-
     
 } // namespace util
 

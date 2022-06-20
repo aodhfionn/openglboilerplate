@@ -7,8 +7,6 @@
 #include <vector>
 #include <functional>
 
-//typedef void (*InputActionCallback)();
-
 #define InputActionCallbackList std::vector<std::pair<int, std::function<void()>>>
 
 class InputHandler

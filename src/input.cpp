@@ -53,30 +53,20 @@ void InputHandler::processInput()
 }
 
 // Callback
-
 void InputHandler::registerKeyDownCallback(int key, std::function<void()> func)
 {
-    std::pair<int, std::function<void()>> pair;
-    pair.first = key;
-    pair.second = func;
-
+    std::pair<int, std::function<void()>> pair(key, func);
     keyDownCallbacks.push_back(pair);
 }
 
 void InputHandler::registerKeyUpCallback(int key, std::function<void()> func)
 {
-    std::pair<int, std::function<void()>> pair;
-    pair.first = key;
-    pair.second = func;
-
+    std::pair<int, std::function<void()>> pair(key, func);
     keyUpCallbacks.push_back(pair);
 }
 
 void InputHandler::registerKeyWhileDownCallback(int key, std::function<void()> func)
 {
-    std::pair<int, std::function<void()>> pair;
-    pair.first = key;
-    pair.second = func;
-
+    std::pair<int, std::function<void()>> pair(key, func);
     keyWhileDownCallbacks.push_back(pair);
 }

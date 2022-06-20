@@ -1,9 +1,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include <iostream>
+#include <time.h>
 
 #include "shader.hpp"
 #include "input.hpp"
+#include "renderer.hpp"
+
+//TODO: implement https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+// I'll do this don't worry about it
 
 void initGLFW() {
     // init glfw
@@ -31,6 +37,10 @@ void onKeyGDown() {
 
 void onKeyGUp() {
     std::cout << "G up" << std::endl;
+}
+
+void a(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    key
 }
 
 int main() {
@@ -93,12 +103,21 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind buffer
     glBindVertexArray(0); // unbind vertex array
 
+    glfwSetKeyCallback(window, a);
+
     // input handler
     InputHandler input(window);
 
     input.registerKeyDownCallback(GLFW_KEY_G, onKeyGPress);
     input.registerKeyUpCallback(GLFW_KEY_G, onKeyGUp);
     input.registerKeyWhileDownCallback(GLFW_KEY_G, onKeyGDown);
+
+    Renderer renderer();
+    renderer.begin(GL_TRIANGLES, VERTEX_COLOR);
+    
+    renderer.pos(-0.5f, -0.5f, 0.0f);
+    renderer.clr(1.0f, 0.0f, 0.0f);
+    renderer.endVertex();
 
     // loop
     while (!glfwWindowShouldClose(window)) {
