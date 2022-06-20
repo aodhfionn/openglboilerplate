@@ -13,7 +13,7 @@ namespace util
     {
         unsigned int i;
         for (auto& element : vector) {
-            if (vector.at(i) == desired) return i;
+            if (element == desired) return i;
 
             i++;
         }

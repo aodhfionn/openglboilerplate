@@ -17,24 +17,22 @@ void InputHandler::processInput()
 {
     std::vector<int> keysDown; // keep this vector here or it will break
 
-    // process while down callbacks
-    for (auto& element : keyWhileDownCallbacks) {
-        bool downThisFrame = keyPressed(element.first, currentWindow);
-
-        if (downThisFrame) {
-            //std::cout << "check" << std::endl;
-        
-            element.second();
-            keysDown.push_back(element.first);
-        }
-    }
-
     // process on down callbacks
     for (auto& element : keyDownCallbacks) {
         bool downLastFrame = util::vectorSearch(element.first, lastFrameKeysDown) != -1;
         bool downThisFrame = keyPressed(element.first, currentWindow);
 
-        if (downThisFrame && downLastFrame) {
+        if (downThisFrame && !downLastFrame) {
+            element.second();
+            keysDown.push_back(element.first);
+        }
+    }
+
+    // process while down callbacks
+    for (auto& element : keyWhileDownCallbacks) {
+        bool downThisFrame = keyPressed(element.first, currentWindow);
+
+        if (downThisFrame) {
             element.second();
             keysDown.push_back(element.first);
         }

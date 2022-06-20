@@ -102,6 +102,7 @@ int main() {
 
     // loop
     while (!glfwWindowShouldClose(window)) {
+        input.setWindow(window);
         input.processInput();
 
         glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
