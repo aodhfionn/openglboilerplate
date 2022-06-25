@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RESOURCES_HPP
+#define RESOURCES_HPP
 
 #include <map>
 
@@ -22,3 +23,5 @@ class ResourceManager
     static Shader loadShaderFromSource(std::string vShaderSource, std::string fShaderSource);
     static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
 };
+
+#endif // RESOURCES_HPP

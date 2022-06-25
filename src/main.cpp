@@ -24,7 +24,6 @@ int main()
 
     // loop
     while (!glfwWindowShouldClose(program.currentWindow)) {
-        float currentFrame;
         util::calcTime(&program.lastFrame, &program.deltaTime);
 
         glfwPollEvents();
