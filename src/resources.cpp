@@ -1,6 +1,9 @@
 #include "shader.hpp"
 #include "resources.hpp"
 
+
+std::map<std::string, Shader> ResourceManager::shaderMap;
+
 ResourceManager::ResourceManager() {}
 
 Shader ResourceManager::allocateShader(const char* vShader, const char* fShader, std::string name, bool fromSource)
