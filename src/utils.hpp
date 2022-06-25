@@ -18,6 +18,15 @@ namespace util
 
         return -1;
     }
+
+    void calcTime(float* last, float* dt)
+    {
+        float current;
+
+        current = glfwGetTime();
+        *dt = current - *last;
+        *last = current;
+    }
     
 } // namespace util
 

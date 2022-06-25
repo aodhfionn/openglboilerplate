@@ -8,17 +8,17 @@ class ResourceManager
 {
     public:
 
-    ResourceManager();
+    static Shader allocateShader(const char* vShaderFile, const char* fShaderFile, std::string name, bool fromSource);
+    static Shader getShader(std::string name);
 
-    Shader allocateShader(const char* vShaderFile, const char* fShaderFile, std::string name, bool fromSource);
-    Shader getShader(std::string name);
-
-    void Clear();
+    static void Clear();
 
     private:
-    
-    std::map<std::string, Shader> shaderMap;
 
-    Shader loadShaderFromSource(std::string vShaderSource, std::string fShaderSource);
-    Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
+    ResourceManager();
+    
+    static std::map<std::string, Shader> shaderMap;
+
+    static Shader loadShaderFromSource(std::string vShaderSource, std::string fShaderSource);
+    static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
 };

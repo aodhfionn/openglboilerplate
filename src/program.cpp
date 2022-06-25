@@ -1,6 +1,4 @@
 #include "program.hpp"
-#include "renderer.hpp"
-#include "resources.hpp"
 #include "input.hpp"
 
 
@@ -10,30 +8,9 @@ void onResize(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void onKeyGPress()
+GLFWwindow* Program::initWindow(unsigned int width, unsigned height, const char* name)
 {
-    std::cout << "G pressed" << std::endl;
-}
-
-void onKeyGDown()
-{
-    std::cout << "G down" << std::endl;
-}
-
-void onKeyGUp()
-{
-    std::cout << "G up" << std::endl;
-}
-
-// program
-Program::Program()
-{
-    
-}
-
-GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
-{
-    GLFWwindow* newWindow = glfwCreateWindow(800, 600, "Hello World!", NULL, NULL);
+    GLFWwindow* newWindow = glfwCreateWindow(width, height, name, NULL, NULL);
 
     if (newWindow == NULL) {
         std::cerr << "Could not create GLFW window." << std::endl;
@@ -45,8 +22,7 @@ GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
     return newWindow;
 }
 
-
-void Program::Init(unsigned int width, unsigned int height)
+void Program::Init(unsigned int width, unsigned int height, const char* name)
 {
     // init glfw
     glfwInit();
@@ -60,18 +36,13 @@ void Program::Init(unsigned int width, unsigned int height)
 
     currentWidth = width;
     currentHeight = height;
+    currentName = name;
 
-    std::cout << "56" << std::endl;
-    resources = new ResourceManager();
-    std::cout << "35" << std::endl;
     renderer = new Renderer();
-    std::cout << "545" << std::endl;
 
-    std::cout << "a" << std::endl;
-    Shader shader = resources->allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+    Shader shader = ResourceManager::allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
 
-    std::cout << "b" << std::endl;
-    GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight);
+    GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight, name);
 
     // load GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -84,7 +55,7 @@ void Program::Init(unsigned int width, unsigned int height)
     glViewport(0, 0, 800, 400);
 }
 
-void Program::Update(float dt)
+void Program::Update()
 {
     
 }
@@ -104,6 +75,6 @@ void Program::Render()
 
 void Program::Clean()
 {
-    resources->Clear();
+    ResourceManager::Clear();
     glfwTerminate();
 }

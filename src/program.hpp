@@ -12,14 +12,18 @@ class Program
     public:
 
     unsigned int currentWidth, currentHeight;
+    const char* currentName;
 
-    // make width and height load from file
-    Program();
+    float lastFrame;
+    float deltaTime;
 
-    void Init(unsigned int width, unsigned int height);
+    //TODO: make width and height load from file so it saves last resolution
+    // also have better way of handling resolution
+
+    void Init(unsigned int width, unsigned int height, const char* name);
     void Clean();
 
-    void Update(float dt);
+    void Update();
     void Render();
 
     GLFWwindow* currentWindow;
@@ -27,8 +31,7 @@ class Program
     private:
 
     Renderer* renderer;
-    ResourceManager* resources;
-    GLFWwindow* initWindow(unsigned int width, unsigned int height);
+    GLFWwindow* initWindow(unsigned int width, unsigned int heigh, const char* name);
 };
 
 #endif // PROGRAM_HPP
