@@ -1,5 +1,4 @@
-#ifndef RESOURCES_HPP
-#define RESOURCES_HPP
+#pragma once
 
 #include <map>
 
@@ -9,19 +8,17 @@ class ResourceManager
 {
     public:
 
-    static Shader allocateShader(const char* vShaderFile, const char* fShaderFile, std::string name, bool fromSource);
-    static Shader getShader(std::string name);
+    ResourceManager();
 
-    static void Clear();
+    Shader allocateShader(const char* vShaderFile, const char* fShaderFile, std::string name, bool fromSource);
+    Shader getShader(std::string name);
+
+    void Clear();
 
     private:
-
-    ResourceManager();
     
-    static std::map<std::string, Shader> shaderMap;
+    std::map<std::string, Shader> shaderMap;
 
-    static Shader loadShaderFromSource(std::string vShaderSource, std::string fShaderSource);
-    static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
+    Shader loadShaderFromSource(std::string vShaderSource, std::string fShaderSource);
+    Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
 };
-
-#endif // RESOURCES_HPP

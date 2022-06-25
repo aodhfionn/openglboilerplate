@@ -13,6 +13,8 @@ class InputHandler
 {
     public:
 
+    InputHandler(GLFWwindow* newWindow);
+
     void setWindow(GLFWwindow* newWindow);
     bool keyPressed(int key, GLFWwindow* window);
 
@@ -23,8 +25,6 @@ class InputHandler
     void processInput();
 
     private:
-
-    InputHandler(GLFWwindow* newWindow);
 
     GLFWwindow* currentWindow;
 

@@ -1,6 +1,10 @@
 #include "shader.hpp"
 #include "resources.hpp"
 
+ResourceManager::ResourceManager() {
+    
+}
+
 Shader ResourceManager::allocateShader(const char* vShader, const char* fShader, std::string name, bool fromSource)
 {
     if (fromSource)

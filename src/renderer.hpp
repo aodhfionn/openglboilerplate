@@ -4,6 +4,18 @@
 #include <iostream>
 #include <vector>
 
+class RenderVertex {
+    public:
+        unsigned int vbo, vao;
+        int type;
+
+        RenderVertex(int type);
+        ~RenderVertex();
+
+        void render();
+        std::vector<float> vertexBuffer;
+};
+
 class Renderer
 {
     public:
@@ -19,18 +31,6 @@ class Renderer
 
     private:
         int mode;
-};
-
-class RenderVertex {
-    public:
-        unsigned int vbo, vao;
-        int type;
-
-        RenderVertex(int type);
-        ~RenderVertex();
-
-        void render();
-        std::vector<float> vertexBuffer;
 };
 
 #endif

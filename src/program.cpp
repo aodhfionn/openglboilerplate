@@ -3,6 +3,9 @@
 #include "resources.hpp"
 #include "input.hpp"
 
+Renderer *r = new Renderer();
+ResourceManager *rm = new ResourceManager();
+
 // static
 void onResize(GLFWwindow* window, int width, int height)
 {
@@ -39,8 +42,6 @@ Program::Program(unsigned int width, unsigned int height)
 
     currentWidth = width;
     currentHeight = height;
-
-    Renderer *r = new Renderer();
 }
 
 GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
@@ -60,7 +61,7 @@ GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
 
 void Program::Init()
 {
-    Shader shader = ResourceManager::allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+    Shader shader = rm->allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
 
     GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight);
 
@@ -95,6 +96,6 @@ void Program::Render()
 
 void Program::Clean()
 {
-    ResourceManager::Clear();
+    rm->Clear();
     glfwTerminate();
 }
