@@ -3,3 +3,7 @@ error handling
 config file w/ saving
 
 rewrite renderer
+image rendering
+
+text rendering
+https://learnopengl.com/In-Practice/Text-Rendering
