@@ -22,8 +22,18 @@ GLFWwindow* Program::initWindow(unsigned int width, unsigned height, const char*
     return newWindow;
 }
 
+void debug()
+{
+    static unsigned int i = 0;
+
+    std::cout << i << std::endl;
+
+    i++;
+}
+
 void Program::Init(unsigned int width, unsigned int height, const char* name)
 {
+    debug();
     // init glfw
     glfwInit();
 
@@ -34,15 +44,17 @@ void Program::Init(unsigned int width, unsigned int height, const char* name)
     // use core profile (smaller subset of opengl features)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    debug();
     currentWidth = width;
     currentHeight = height;
     currentName = name;
+    
+    debug();
+    // Renderer renderer();
 
-    renderer = new Renderer();
+    debug();
 
-    Shader shader = ResourceManager::allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
-
-    GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight, name);
+    currentWindow = initWindow(currentWidth, currentHeight, name);
 
     // load GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -65,12 +77,13 @@ void Program::Render()
     glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    renderer->begin(GL_TRIANGLES);
-    renderer->pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
-    renderer->pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
-    renderer->pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
-    renderer->render();
-    renderer->current->~RenderVertex();
+    // renderer.begin(GL_TRIANGLES);
+    // renderer.pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
+    // renderer.pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
+    // renderer.pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
+    // renderer.render();
+
+    // renderer.current.~RenderVertex();
 }
 
 void Program::Clean()

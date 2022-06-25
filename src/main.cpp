@@ -14,9 +14,22 @@ const char* NAME = "Window";
 
 Program program;
 
+
+    void calcTime(float* last, float* dt)
+    {
+        float current;
+
+        current = glfwGetTime();
+        *dt = current - *last;
+        *last = current;
+    }
+
 int main()
 {
     program.Init(WIDTH, HEIGHT, NAME);
+
+    Shader shader = ResourceManager::allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+    shader.use();
 
     // input
 
@@ -24,7 +37,7 @@ int main()
 
     // loop
     while (!glfwWindowShouldClose(program.currentWindow)) {
-        util::calcTime(&program.lastFrame, &program.deltaTime);
+        calcTime(&program.lastFrame, &program.deltaTime);
 
         glfwPollEvents();
 

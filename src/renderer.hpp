@@ -1,36 +1,36 @@
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
+// #ifndef RENDERER_HPP
+// #define RENDERER_HPP
 
-#include <iostream>
-#include <vector>
+// #include <iostream>
+// #include <vector>
 
-class RenderVertex {
-    public:
-        unsigned int vbo, vao;
-        int type;
+// class RenderVertex {
+//     public:
+//         unsigned int vbo, vao;
+//         int type;
 
-        RenderVertex(int type);
-        ~RenderVertex();
+//         RenderVertex(int type);
+//         ~RenderVertex();
 
-        void render();
-        std::vector<float> vertexBuffer;
-};
+//         void render();
+//         std::vector<float> vertexBuffer;
+// };
 
-class Renderer
-{
-    public:
-        RenderVertex *current;
+// class Renderer
+// {
+//     public:
+//         RenderVertex *current;
 
-        Renderer();
+//         Renderer();
 
-        void begin(int mode);
-        Renderer* pos(float x, float y, float z);
-        Renderer* clr(float r, float g, float b, float a);
-        void endVertex();
-        void render();
+//         void begin(int mode);
+//         Renderer* pos(float x, float y, float z);
+//         Renderer* clr(float r, float g, float b, float a);
+//         void endVertex();
+//         void render();
 
-    private:
-        int mode;
-};
+//     private:
+//         int mode;
+// };
 
-#endif
+// #endif
