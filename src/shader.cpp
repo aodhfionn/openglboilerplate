@@ -75,6 +75,7 @@ void Shader::loadShaders(const char* vertexShaderSource, const char* fragmentSha
     vertexID = Compile(vertexShaderSource, GL_VERTEX_SHADER);
     fragmentID = Compile(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
+    std::cout << "passed" << std::endl;
     checkCompileErrors(vertexID, false);
     checkCompileErrors(fragmentID, false);
 

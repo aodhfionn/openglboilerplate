@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "renderer.hpp"
+#include "resources.hpp"
 
 class Program
 {
@@ -12,9 +14,9 @@ class Program
     unsigned int currentWidth, currentHeight;
 
     // make width and height load from file
-    Program(unsigned int width, unsigned int height);
+    Program();
 
-    void Init();
+    void Init(unsigned int width, unsigned int height);
     void Clean();
 
     void Update(float dt);
@@ -24,6 +26,8 @@ class Program
     
     private:
 
+    Renderer* renderer;
+    ResourceManager* resources;
     GLFWwindow* initWindow(unsigned int width, unsigned int height);
 };
 

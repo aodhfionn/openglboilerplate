@@ -3,8 +3,6 @@
 #include "resources.hpp"
 #include "input.hpp"
 
-Renderer *r = new Renderer();
-ResourceManager *rm = new ResourceManager();
 
 // static
 void onResize(GLFWwindow* window, int width, int height)
@@ -28,20 +26,9 @@ void onKeyGUp()
 }
 
 // program
-Program::Program(unsigned int width, unsigned int height)
+Program::Program()
 {
-    // init glfw
-    glfwInit();
-
-    // set to opengl 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-    // use core profile (smaller subset of opengl features)
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    currentWidth = width;
-    currentHeight = height;
+    
 }
 
 GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
@@ -59,10 +46,31 @@ GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
 }
 
 
-void Program::Init()
+void Program::Init(unsigned int width, unsigned int height)
 {
-    Shader shader = rm->allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+    // init glfw
+    glfwInit();
 
+    // set to opengl 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
+    // use core profile (smaller subset of opengl features)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    currentWidth = width;
+    currentHeight = height;
+
+    std::cout << "56" << std::endl;
+    resources = new ResourceManager();
+    std::cout << "35" << std::endl;
+    renderer = new Renderer();
+    std::cout << "545" << std::endl;
+
+    std::cout << "a" << std::endl;
+    Shader shader = resources->allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+
+    std::cout << "b" << std::endl;
     GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight);
 
     // load GLAD
@@ -86,16 +94,16 @@ void Program::Render()
     glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    r->begin(GL_TRIANGLES);
-    r->pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
-    r->pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
-    r->pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
-    r->render();
-    r->current->~RenderVertex();
+    renderer->begin(GL_TRIANGLES);
+    renderer->pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
+    renderer->pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
+    renderer->pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
+    renderer->render();
+    renderer->current->~RenderVertex();
 }
 
 void Program::Clean()
 {
-    rm->Clear();
+    resources->Clear();
     glfwTerminate();
 }

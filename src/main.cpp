@@ -13,11 +13,18 @@
 //TODO: implement systems similar to https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
 // I'll do this since I've already started work on it
 
-Program program(800, 600);
+#define WIDTH 800
+#define HEIGHT 600
+
+Program program;
 
 int main()
 {
-    program.Init();
+    std::cout << "1" << std::endl;
+    //Program *program = new Program();
+    std::cout << "1asdasds" << std::endl;
+    program.Init(WIDTH, HEIGHT);
+    
 
     // input
 

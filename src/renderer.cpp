@@ -1,15 +1,19 @@
-#include "renderer.hpp"
 #include <iostream>
 #include <glad/glad.h>
+#include "renderer.hpp"
 
 Renderer::Renderer()
 {
     // position :: xyz
+    std::cout << "sfgsdfg";
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (void*) 0);
+    std::cout << "g9f";
     glEnableVertexAttribArray(0);
 
     // color :: rgba
+    std::cout << "d9fk";
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (void*) (sizeof(float) * 3));
+    std::cout << "alks";
     glEnableVertexAttribArray(1);
 }
 
