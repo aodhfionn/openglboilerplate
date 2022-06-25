@@ -12,5 +12,5 @@ This is some boilerplate code for the beggining to almost any OpenGL Project
 
 ## Contributors:
 
-- https://github.com/abdowns
-- https://github.com/youngermax
+- [abdowns](https://github.com/abdowns)
+- [YoungerMax](https://github.com/youngermax)
