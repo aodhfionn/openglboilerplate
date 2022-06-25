@@ -1,7 +1,6 @@
 #include "program.hpp"
 #include "input.hpp"
 
-
 // static
 void onResize(GLFWwindow* window, int width, int height)
 {
@@ -50,7 +49,6 @@ void Program::Init(unsigned int width, unsigned int height, const char* name)
     currentName = name;
     
     debug();
-    // Renderer renderer();
 
     debug();
 
@@ -76,14 +74,6 @@ void Program::Render()
 {
     glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // renderer.begin(GL_TRIANGLES);
-    // renderer.pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
-    // renderer.pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
-    // renderer.pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
-    // renderer.render();
-
-    // renderer.current.~RenderVertex();
 }
 
 void Program::Clean()

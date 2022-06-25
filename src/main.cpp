@@ -6,7 +6,6 @@
 
 #include "program.hpp"
 #include "input.hpp"
-#include "utils.hpp"
 
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
@@ -14,15 +13,14 @@ const char* NAME = "Window";
 
 Program program;
 
+void calcTime(float* last, float* dt)
+{
+    float current;
 
-    void calcTime(float* last, float* dt)
-    {
-        float current;
-
-        current = glfwGetTime();
-        *dt = current - *last;
-        *last = current;
-    }
+    current = glfwGetTime();
+    *dt = current - *last;
+    *last = current;
+}
 
 int main()
 {

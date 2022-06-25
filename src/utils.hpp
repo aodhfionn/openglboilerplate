@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <GLFW/glfw3.h>
 
 namespace util
 {
@@ -17,7 +18,7 @@ namespace util
 
         return -1;
     }
-    
+
 } // namespace util
 
 #endif // UTILS_HPP

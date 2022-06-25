@@ -30,7 +30,6 @@ class Program
     
     private:
 
-    // Renderer renderer;
     GLFWwindow* initWindow(unsigned int width, unsigned int heigh, const char* name);
 };
 
