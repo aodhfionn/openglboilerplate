@@ -45,6 +45,7 @@ int main()
         program.Update();
         program.Render();
 
+
         glfwSwapBuffers(program.currentWindow);
     }
 
