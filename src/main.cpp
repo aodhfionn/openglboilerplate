@@ -7,6 +7,7 @@
 #include "Program.hpp"
 #include "TextRenderer.hpp"
 #include "Utility.hpp"
+#include "Shader.hpp"
 
 
 class MyTestApplication : public Application {
@@ -90,7 +91,7 @@ class MyTestApplication : public Application {
             this->showSquare = false;
 
             // TODO: currently not working
-            this->fragmentShader.setBool("isTextured", true);
+            this->program.setBool("isTextured", true);
         }
 
         void terminate() {

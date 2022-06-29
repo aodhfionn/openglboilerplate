@@ -20,8 +20,6 @@ class Shader {
         void compile();
 
         std::string getCompileErrors();
-
-        void setBool(const char* name, bool val);
 };
 
 #endif

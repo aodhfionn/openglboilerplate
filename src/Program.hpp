@@ -23,7 +23,8 @@ class Program {
         std::string getLinkingErrors();
 
         void use();
-    
+
+        void setBool(const char* name, bool val);
     private:
         bool printErrors;
 };

@@ -71,3 +71,7 @@ void Program::use() {
 
     glUseProgram(this->id);
 }
+
+void Program::setBool(const char* name, bool val) {
+    glUniform1i(glGetUniformLocation(this->id, name), (int) val);
+}

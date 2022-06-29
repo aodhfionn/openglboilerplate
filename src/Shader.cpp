@@ -45,7 +45,3 @@ std::string Shader::getCompileErrors() {
     glGetShaderInfoLog(id, 512, NULL, log);
     return std::string(log);
 }
-
-void Shader::setBool(const char* name, bool val) {
-    glUniform1i(glGetUniformLocation(this->id, name), (int) val);
-}
