@@ -25,6 +25,9 @@ class Program {
         void use();
 
         void setBool(const char* name, bool val);
+        void setInt(const char* name, int val);
+        void setFloat(const char* name, float val);
+        void setDouble(const char* name, double val);
     private:
         bool printErrors;
 };

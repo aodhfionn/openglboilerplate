@@ -75,3 +75,15 @@ void Program::use() {
 void Program::setBool(const char* name, bool val) {
     glUniform1i(glGetUniformLocation(this->id, name), (int) val);
 }
+
+void Program::setInt(const char* name, int val) {
+    glUniform1i(glGetUniformLocation(this->id, name), val);
+}
+
+void Program::setFloat(const char* name, float val) {
+    glUniform1f(glGetUniformLocation(this->id, name), val);
+}
+
+void Program::setDouble(const char* name, double val) {
+    glUniform1d(glGetUniformLocation(this->id, name), val);
+}

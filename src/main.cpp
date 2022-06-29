@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <math.h>
 
 #include "Application.hpp"
 #include "Program.hpp"
@@ -89,9 +90,6 @@ class MyTestApplication : public Application {
             }
 
             this->showSquare = false;
-
-            // TODO: currently not working
-            this->program.setBool("isTextured", true);
         }
 
         void terminate() {
