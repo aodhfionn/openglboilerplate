@@ -1,61 +1,123 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <iostream>
-#include <time.h>
+#include <sstream>
+#include <fstream>
 
-#include "program.hpp"
-#include "shader.hpp"
-#include "input.hpp"
-#include "renderer.hpp"
-#include "resources.hpp"
+#include "Application.hpp"
+#include "Program.hpp"
+#include "TextRenderer.hpp"
+#include "Utility.hpp"
 
-//TODO: implement systems similar to https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
-// I'll do this since I've already started work on it
 
-#define WIDTH 800
-#define HEIGHT 600
+class MyTestApplication : public Application {
+    public:
+        unsigned int vertexBufferingObject, vertexArrayObject, elementBufferingObject;
 
-Program program;
+        void initialize() {
+            this->initializeProgram();
+            this->program.use();
+            this->tr.initialize();
 
-int main()
-{
-    std::cout << "1" << std::endl;
-    //Program *program = new Program();
-    std::cout << "1asdasds" << std::endl;
-    program.Init(WIDTH, HEIGHT);
-    
+            // square
+            float vertices[] = {
+            //    X      Y     Z   /   R     G     B     A  / TX    TY
+                 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+                -0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f
+            };
 
-    // input
+            // render order
+            unsigned int indices[] = {
+                0, 1, 3,
+                1, 2, 3
+            };
+            
+            // create arrays & buffers
+            glGenVertexArrays(1, &vertexArrayObject);
+            glGenBuffers(1, &vertexBufferingObject);
+            glGenBuffers(1, &elementBufferingObject);
+            
+            // bind vertex array
+            glBindVertexArray(vertexArrayObject);
 
-    InputHandler input(program.currentWindow);
+            // add vertices
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBufferingObject);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // input.registerKeyDownCallback(GLFW_KEY_G, onKeyGPress);
-    // input.registerKeyUpCallback(GLFW_KEY_G, onKeyGUp);
-    // input.registerKeyWhileDownCallback(GLFW_KEY_G, onKeyGDown);
-    
-    // renderer
+            // add indices
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferingObject);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    // time
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
+            // position: xyz
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 9, (void*) 0);
+            glEnableVertexAttribArray(0);
+            
+            // color: rgba
+            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 9, (void*) (sizeof(float) * 3));
+            glEnableVertexAttribArray(1);
 
-    // loop
-    while (!glfwWindowShouldClose(program.currentWindow)) {
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-        glfwPollEvents();
+            // texture: xy
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 9, (void*) (sizeof(float) * 7));
+            glEnableVertexAttribArray(2);
 
-        input.setWindow(program.currentWindow);
-        input.processInput();
+            // unbind
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            glBindVertexArray(0);
 
-        program.Update(deltaTime);
-        program.Render();
+            // enable blending/alpha channel
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        glfwSwapBuffers(program.currentWindow);
-    }
+            inputHandler.registerKeyDownCallback(GLFW_KEY_G, [this]() -> void {
+                this->showSquare = true;
+            });
+        }
 
-    glfwTerminate();
-    return 0;
+        void render() {
+            glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            if (this->showSquare) {
+                glBindVertexArray(vertexArrayObject);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferingObject);
+                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                glBindVertexArray(0);
+            }
+
+            this->showSquare = false;
+
+            // TODO: currently not working
+            this->fragmentShader.setBool("isTextured", true);
+        }
+
+        void terminate() {
+            glDeleteBuffers(1, &vertexBufferingObject);
+            glDeleteBuffers(1, &elementBufferingObject);
+            glDeleteVertexArrays(1, &vertexArrayObject);
+        }
+    private:
+        Program program;
+        Shader vertexShader = Shader(GL_VERTEX_SHADER, true);
+        Shader fragmentShader = Shader(GL_FRAGMENT_SHADER, true);
+        bool showSquare;
+        TextRenderer tr = TextRenderer("res/fonts/OpenSans-Light.ttf", 48);
+
+        void initializeProgram() {
+            loadShaderFromFile(&this->vertexShader, "res/shaders/default.vert", true);
+            loadShaderFromFile(&this->fragmentShader, "res/shaders/default.frag", true);
+
+            this->program.setVertexShader(&this->vertexShader);
+            this->program.setFragmentShader(&this->fragmentShader);
+            
+            this->program.linkProgram();
+        }
+};
+
+MyTestApplication app;
+
+int main() {
+    return app.run(1920, 1080, "Window");
 }
