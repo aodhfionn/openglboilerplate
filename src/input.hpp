@@ -18,9 +18,7 @@ class InputHandler
     void setWindow(GLFWwindow* newWindow);
     bool keyPressed(int key, GLFWwindow* window);
 
-    void registerKeyDownCallback(int key, std::function<void()> onDown);
-    void registerKeyUpCallback(int key, std::function<void()> onRelease);
-    void registerKeyWhileDownCallback(int key, std::function<void()> whileDown);
+    void registerCallback(int key, std::function<void()> func, InputActionCallbackList*);
 
     void processInput();
 

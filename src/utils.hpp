@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <GLFW/glfw3.h>
 
 namespace util
 {
-    
     template<typename T>
     int vectorSearch(T desired, std::vector<T> vector)
     {
@@ -18,7 +18,7 @@ namespace util
 
         return -1;
     }
-    
+
 } // namespace util
 
 #endif // UTILS_HPP

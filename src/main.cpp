@@ -5,53 +5,46 @@
 #include <time.h>
 
 #include "program.hpp"
-#include "shader.hpp"
 #include "input.hpp"
-#include "renderer.hpp"
-#include "resources.hpp"
 
-//TODO: implement systems similar to https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
-// I'll do this since I've already started work on it
-
-#define WIDTH 800
-#define HEIGHT 600
+const unsigned int WIDTH = 800;
+const unsigned int HEIGHT = 600;
+const char* NAME = "Window";
 
 Program program;
 
+void calcTime(float* last, float* dt)
+{
+    float current;
+
+    current = glfwGetTime();
+    *dt = current - *last;
+    *last = current;
+}
+
 int main()
 {
-    std::cout << "1" << std::endl;
-    //Program *program = new Program();
-    std::cout << "1asdasds" << std::endl;
-    program.Init(WIDTH, HEIGHT);
-    
+    program.Init(WIDTH, HEIGHT, NAME);
+
+    Shader shader = ResourceManager::allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
+    shader.use();
 
     // input
 
     InputHandler input(program.currentWindow);
 
-    // input.registerKeyDownCallback(GLFW_KEY_G, onKeyGPress);
-    // input.registerKeyUpCallback(GLFW_KEY_G, onKeyGUp);
-    // input.registerKeyWhileDownCallback(GLFW_KEY_G, onKeyGDown);
-    
-    // renderer
-
-    // time
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
-
     // loop
     while (!glfwWindowShouldClose(program.currentWindow)) {
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        calcTime(&program.lastFrame, &program.deltaTime);
+
         glfwPollEvents();
 
         input.setWindow(program.currentWindow);
         input.processInput();
 
-        program.Update(deltaTime);
+        program.Update();
         program.Render();
+
 
         glfwSwapBuffers(program.currentWindow);
     }

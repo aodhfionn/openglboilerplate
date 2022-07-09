@@ -1,39 +1,18 @@
 #include "program.hpp"
-#include "renderer.hpp"
-#include "resources.hpp"
 #include "input.hpp"
-
+#include "renderer.hpp"
 
 // static
+BatchRenderer renderer;
+
 void onResize(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void onKeyGPress()
+GLFWwindow* Program::initWindow(unsigned int width, unsigned height, const char* name)
 {
-    std::cout << "G pressed" << std::endl;
-}
-
-void onKeyGDown()
-{
-    std::cout << "G down" << std::endl;
-}
-
-void onKeyGUp()
-{
-    std::cout << "G up" << std::endl;
-}
-
-// program
-Program::Program()
-{
-    
-}
-
-GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
-{
-    GLFWwindow* newWindow = glfwCreateWindow(800, 600, "Hello World!", NULL, NULL);
+    GLFWwindow* newWindow = glfwCreateWindow(width, height, name, NULL, NULL);
 
     if (newWindow == NULL) {
         std::cerr << "Could not create GLFW window." << std::endl;
@@ -45,9 +24,18 @@ GLFWwindow* Program::initWindow(unsigned int width, unsigned height)
     return newWindow;
 }
 
-
-void Program::Init(unsigned int width, unsigned int height)
+void debug()
 {
+    static unsigned int i = 0;
+
+    std::cout << i << std::endl;
+
+    i++;
+}
+
+void Program::Init(unsigned int width, unsigned int height, const char* name)
+{
+    debug();
     // init glfw
     glfwInit();
 
@@ -58,20 +46,16 @@ void Program::Init(unsigned int width, unsigned int height)
     // use core profile (smaller subset of opengl features)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    debug();
     currentWidth = width;
     currentHeight = height;
+    currentName = name;
+    
+    debug();
 
-    std::cout << "56" << std::endl;
-    resources = new ResourceManager();
-    std::cout << "35" << std::endl;
-    renderer = new Renderer();
-    std::cout << "545" << std::endl;
+    debug();
 
-    std::cout << "a" << std::endl;
-    Shader shader = resources->allocateShader("shaders/default.vert", "shaders/default.frag", "main", false);
-
-    std::cout << "b" << std::endl;
-    GLFWwindow* currentWindow = initWindow(currentWidth, currentHeight);
+    currentWindow = initWindow(currentWidth, currentHeight, name);
 
     // load GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -82,9 +66,11 @@ void Program::Init(unsigned int width, unsigned int height)
     // set resize event handler
     glfwSetFramebufferSizeCallback(currentWindow, onResize);
     glViewport(0, 0, 800, 400);
+
+    renderer.initialize();
 }
 
-void Program::Update(float dt)
+void Program::Update()
 {
     
 }
@@ -94,16 +80,36 @@ void Program::Render()
     glClearColor(0.1f, 0.1f, 0.14f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    renderer->begin(GL_TRIANGLES);
-    renderer->pos(0.0f, 1.0f, 0.0f)->clr(1.0f, 0.0f, 0.0f, 0.0f)->endVertex();
-    renderer->pos(0.0f, 0.0f, 0.0f)->clr(0.0f, 1.0f, 0.0f, 0.0f)->endVertex();
-    renderer->pos(1.0f, 0.0f, 0.0f)->clr(0.0f, 0.0f, 1.0f, 0.0f)->endVertex();
-    renderer->render();
-    renderer->current->~RenderVertex();
+    // for (int i = 0; i <= 4; i++)
+    // {
+    //     renderer.newElement()
+    //     .pos(0.0f, 1.0f, 0.0f).clr(1.0f, 0.0f, 0.0f, 1.0f).nextVertex()
+    //     .pos(1.0f, 1.0f, 0.0f).clr(0.0f, 1.0f, 0.0f, 1.0f).nextVertex()
+    //     .pos(1.0f, 0.0f, 0.0f).clr(0.0f, 0.0f, 1.0f, 1.0f).nextVertex()
+    //     .pos(0.0f, 0.0f, 0.0f).clr(0.0f, 0.0f, 0.0f, 1.0f).finishElement();
+    // }
+
+    // renderer.newElement();
+
+    // renderer.pos(-0.5f, -0.5f, 0.0f);
+    // renderer.clr(1.0f, 0.0f, 0.0f, 1.0f);
+    // renderer.nextVertex();
+
+    // renderer.pos(0.5f, -0.5f, 0.0f);
+    // renderer.clr(0.0f, 1.0f, 0.0f, 1.0f);
+    // renderer.nextVertex();
+
+    // renderer.pos(0.0f, 0.5f, 0.0f);
+    // renderer.clr(0.0f, 0.0f, 1.0f, 1.0f);
+    // renderer.nextVertex();
+    
+    // renderer.finishElement();
+    
+    renderer.batch();
 }
 
 void Program::Clean()
 {
-    resources->Clear();
+    ResourceManager::Clear();
     glfwTerminate();
 }

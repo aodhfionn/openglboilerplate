@@ -1,92 +1,155 @@
 #include <iostream>
-#include <glad/glad.h>
 #include "renderer.hpp"
 
-Renderer::Renderer()
-{
-    // position :: xyz
-    std::cout << "sfgsdfg";
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (void*) 0);
-    std::cout << "g9f";
-    glEnableVertexAttribArray(0);
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-    // color :: rgba
-    std::cout << "d9fk";
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (void*) (sizeof(float) * 3));
-    std::cout << "alks";
-    glEnableVertexAttribArray(1);
+void temp(std::vector<float> a) {
+    std::cout << "[";
+    for (int i = 0; i < a.size(); i++) {
+        std::cout << a.at(i) << "f, ";
+    }
+    std::cout << "]" << std::endl;
 }
 
-void Renderer::begin(int mode)
-{
-    this->mode = mode;
-    this->current = new RenderVertex(mode);
+void temp(float a[]) {
+    std::cout << "[";
+    for (int i = 0; i < sizeof(a); i++) {
+        std::cout << a[i] << "f, ";
+    }
+    std::cout << "]" << std::endl;
 }
 
-Renderer* Renderer::pos(float x, float y, float z)
-{
-    this->current->vertexBuffer.push_back(x);
-    this->current->vertexBuffer.push_back(y);
-    this->current->vertexBuffer.push_back(z);
+std::vector<float> tempVertexBuffer;
+std::vector<float> vertexBuffer;
+std::vector<float> indicesBuffer;
 
-    return this;
+unsigned int vbo, vao;
+
+BatchRenderer::BatchRenderer()
+{
+    
 }
 
-Renderer* Renderer::clr(float r, float g, float b, float a)
+BatchRenderer::~BatchRenderer()
 {
-    this->current->vertexBuffer.push_back(r);
-    this->current->vertexBuffer.push_back(g);
-    this->current->vertexBuffer.push_back(b);
-    this->current->vertexBuffer.push_back(a);
+    vertexBuffer.clear();
+    indicesBuffer.clear();
 
-    return this;
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
 }
 
-void Renderer::endVertex()
+void BatchRenderer::initialize()
 {
-    if (this->current->vertexBuffer.size() % 7 == 0) {
-        // TODO: make this error message better
-        throw std::length_error("vertex does not have enoguh values (are you mising position or color?)");
+    this->initVertexAttribPointers();
+    this->createGLBuffers();
+}
+
+BatchRenderer BatchRenderer::newElement()
+{
+    tempVertexBuffer.clear();
+    this->expectingNext = BatchRendererNext::POSITION;
+
+    return *this;
+}
+
+BatchRenderer BatchRenderer::pos(float x, float y, float z)
+{
+    if (this->expectingNext != POSITION) {
+        throw std::invalid_argument("wrong order, not expecting a position right now");
     }
 
-    float* vertices = this->current->vertexBuffer.data();
+    tempVertexBuffer.push_back(x);
+    tempVertexBuffer.push_back(y);
+    tempVertexBuffer.push_back(z);
 
-    // allocate
-    glGenBuffers(1, &this->current->vbo);
-    glGenVertexArrays(1, &this->current->vao);
+    this->expectingNext = BatchRendererNext::COLOR;
+
+    return *this;
+}
+
+BatchRenderer BatchRenderer::clr(float r, float g, float b, float a)
+{
+    if (this->expectingNext != COLOR) {
+        throw std::invalid_argument("wrong order, not expecting a color right now");
+    }
+
+    tempVertexBuffer.push_back(r);
+    tempVertexBuffer.push_back(g);
+    tempVertexBuffer.push_back(b);
+
+    //tempVertexBuffer.push_back(a);
+
+    this->expectingNext = BatchRendererNext::POSITION;
+
+    return *this;
+}
+
+BatchRenderer BatchRenderer::nextVertex()
+{
+    temp(tempVertexBuffer);
+
+    if (this->expectingNext != POSITION) {
+        throw std::invalid_argument("malformed");
+    }
+
+    return *this;
+}
+
+void BatchRenderer::finishElement()
+{
+    // std::cout<<"Temp: ";
+    temp(tempVertexBuffer);
+
+    for (float f : tempVertexBuffer) {
+        vertexBuffer.push_back(f);
+    }
+}
+
+void BatchRenderer::batch()
+{
+    // float vertices[this->vertexBuffer.size()];
+    // std::copy(this->vertexBuffer.begin(), this->vertexBuffer.end(), vertices);
+
+    // // std::cout << "adfjisoa: ";
+    // temp(vertices);
+
+    float vertices[18] {
+        // x     y     z    r      g     b
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+    };
 
     // bind
-    glBindBuffer(GL_ARRAY_BUFFER, this->current->vbo);
-    glBindVertexArray(this->current->vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    // data
+    // draw
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    this->initVertexAttribPointers();
 
     // unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    vertexBuffer.clear();
 }
 
-void Renderer::render()
+void BatchRenderer::initVertexAttribPointers()
 {
-    this->current->render();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*) 0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*) (sizeof(float) * 3));
+    glEnableVertexAttribArray(1);
 }
 
-
-// render vertex
-RenderVertex::RenderVertex(int type)
+void BatchRenderer::createGLBuffers()
 {
-    this->type = type;
-}
-
-RenderVertex::~RenderVertex()
-{
-    glDeleteBuffers(1, &this->vbo);
-    glDeleteVertexArrays(1, &this->vao);
-}
-
-void RenderVertex::render()
-{
-    glBindVertexArray(this->vao);
-    glDrawArrays(this->type, 0, this->vertexBuffer.size());
+    glGenBuffers(1, &vbo);
+    glGenVertexArrays(1, &vao);
 }

@@ -1,11 +1,7 @@
 #include "input.hpp"
 #include "utils.hpp"
 
-InputHandler::InputHandler(GLFWwindow* newWindow)
-{
-    newWindow = currentWindow;
-}
-
+InputHandler::InputHandler(GLFWwindow* newWindow) { setWindow(newWindow); }
 void InputHandler::setWindow(GLFWwindow* newWindow) {currentWindow = newWindow;}
 
 bool InputHandler::keyPressed(int key, GLFWwindow* window) 
@@ -52,21 +48,8 @@ void InputHandler::processInput()
     lastFrameKeysDown = keysDown;
 }
 
-// Callback
-void InputHandler::registerKeyDownCallback(int key, std::function<void()> func)
+void InputHandler::registerCallback(int key, std::function<void()> func, InputActionCallbackList* list)
 {
     std::pair<int, std::function<void()>> pair(key, func);
-    keyDownCallbacks.push_back(pair);
-}
-
-void InputHandler::registerKeyUpCallback(int key, std::function<void()> func)
-{
-    std::pair<int, std::function<void()>> pair(key, func);
-    keyUpCallbacks.push_back(pair);
-}
-
-void InputHandler::registerKeyWhileDownCallback(int key, std::function<void()> func)
-{
-    std::pair<int, std::function<void()>> pair(key, func);
-    keyWhileDownCallbacks.push_back(pair);
+    list->push_back(pair);
 }

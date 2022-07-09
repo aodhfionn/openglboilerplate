@@ -4,33 +4,52 @@
 #include <iostream>
 #include <vector>
 
-class RenderVertex {
-    public:
-        unsigned int vbo, vao;
-        int type;
 
-        RenderVertex(int type);
-        ~RenderVertex();
-
-        void render();
-        std::vector<float> vertexBuffer;
+enum BatchRendererNext {
+    POSITION,
+    COLOR
 };
 
-class Renderer
-{
+class BatchRenderer {
     public:
-        RenderVertex *current;
+    
+    BatchRenderer();
+    ~BatchRenderer();
 
-        Renderer();
+    void initialize();
 
-        void begin(int mode);
-        Renderer* pos(float x, float y, float z);
-        Renderer* clr(float r, float g, float b, float a);
-        void endVertex();
-        void render();
+    BatchRenderer newElement();
+    BatchRenderer pos(float x, float y, float z);
+    BatchRenderer clr(float r, float g, float b, float a);
+    BatchRenderer nextVertex();
+    void finishElement();
+
+    void batch();
 
     private:
-        int mode;
+
+    void initVertexAttribPointers();
+    void createGLBuffers();
+
+    BatchRendererNext expectingNext;
 };
 
-#endif
+class TextRenderer {
+    public:
+
+    TextRenderer(BatchRenderer *renderer, std::string fontFile, int fontSize);
+    ~TextRenderer();
+
+    void initializeFont();
+
+    void render(std::string string, float x, float y, float r, float g, float b, float a);
+
+    float getStringWidth(std::string string);
+    float getStringHeight(std::string string);
+
+    private:
+
+    BatchRenderer *renderer;
+};
+
+#endif // RENDERER_HPP
