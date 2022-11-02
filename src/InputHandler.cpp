@@ -3,61 +3,62 @@
 #include "InputHandler.hpp"
 
 
-InputHandler::InputHandler(GLFWwindow* window) {
-    this->window = window;
-}
+InputHandler::InputHandler() { }
 
 InputHandler::~InputHandler() {
-    this->keyDownCallbacks.clear();
-    this->keyPressCallbacks.clear();
-    this->keyReleaseCallbacks.clear();
-}
-
-void InputHandler::registerKeyDownCallback(int key, std::function<void()> onKeyDown) {
-    this->keyDownCallbacks.push_back(std::pair<int, std::function<void()>>(key, onKeyDown));
-}
-
-void InputHandler::registerKeyPressCallback(int key, std::function<void()> onKeyPress) {
-    this->keyPressCallbacks.push_back(std::pair<int, std::function<void()>>(key, onKeyPress));
-}
-
-void InputHandler::registerKeyReleaseCallback(int key, std::function<void()> onKeyRelease) {
-    this->keyReleaseCallbacks.push_back(std::pair<int, std::function<void()>>(key, onKeyRelease));
-}
-
-void InputHandler::process() {
-    // See comment in InputHandler.hpp
-    bool current[348];
-
-    for (std::pair<int, std::function<void()>> callback : this->keyDownCallbacks) {
-        bool downNow = glfwGetKey(this->window, callback.first) == GLFW_PRESS;
-        current[callback.first] = downNow;
-
-        if (downNow) {
-            current[callback.first] = true;
-            callback.second();
-        }
+    for (int i = 0; this->keyDownCallbacks->size() > i; i++) {
+        this->keyDownCallbacks[i].~vector();
     }
 
-    for (std::pair<int, std::function<void()>> callback : this->keyReleaseCallbacks) {
-        bool downNow = glfwGetKey(this->window, callback.first) == GLFW_PRESS;
-        bool downLast = this->lastCallDown[callback.first];
-        current[callback.first] = downNow;
-
-        if (!downNow && downLast) {
-            callback.second();
-        }
-    }
-    
-    for (std::pair<int, std::function<void()>> callback : this->keyPressCallbacks) {
-        bool downNow = glfwGetKey(this->window, callback.first) == GLFW_PRESS;
-        bool downLast = this->lastCallDown[callback.first];
-        current[callback.first] = downNow;
-
-        if (downNow && !downLast) {
-            callback.second();
-        }
+    for (int i = 0; this->keyPressCallbacks->size() > i; i++) {
+        this->keyPressCallbacks[i].~vector();
     }
 
-    std::copy(std::begin(current), std::end(current), std::begin(this->lastCallDown));
+    for (int i = 0; this->keyReleaseCallbacks->size() > i; i++) {
+        this->keyReleaseCallbacks[i].~vector();
+    }
+}
+
+void InputHandler::glfwCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    switch (action) {
+        case GLFW_PRESS:
+            for (CallbackFunc callback : this->keyPressCallbacks[key]) {
+                callback();
+            }
+        
+        case GLFW_REPEAT:
+            for (CallbackFunc callback : this->keyDownCallbacks[key]) {
+                callback();
+            }
+
+            break;
+        
+        case GLFW_RELEASE:
+            for (CallbackFunc callback : this->keyReleaseCallbacks[key]) {
+                callback();
+            }
+
+            break;
+    }
+}
+
+/**
+ * Fires for every frame while key is down
+ */
+void InputHandler::registerKeyDownCallback(int key, CallbackFunc onKeyDownFunc) {
+    this->keyDownCallbacks[key].push_back(onKeyDownFunc);
+}
+
+/**
+ * Fires once when the key is first down
+ */
+void InputHandler::registerKeyPressCallback(int key, CallbackFunc onKeyPressFunc) {
+    this->keyPressCallbacks[key].push_back(onKeyPressFunc);
+}
+
+/**
+ * Fires once when the key is first not down
+ */
+void InputHandler::registerKeyReleaseCallback(int key, CallbackFunc onKeyPressFunc) {
+    this->keyReleaseCallbacks[key].push_back(onKeyPressFunc);
 }

@@ -8,6 +8,7 @@ This is some boilerplate code for the beggining to almost any OpenGL Project
     - OpenGL
     - GLFW (X11)
     - GLAD (see [glad/README.md](glad/README.md))
+    - FreeType
 2. Compile and run!
 
 ## Contributors:

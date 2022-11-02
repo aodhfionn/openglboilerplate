@@ -4,7 +4,9 @@
 #include "Application.hpp"
 
 
-// public
+InputHandler Application::inputHandler;
+
+
 int Application::run(unsigned int width, unsigned int height, const char* windowName) {
     this->internal_initializeGLFW();
     this->currentWindow = this->internal_initializeWindow(width, height, windowName);
@@ -17,7 +19,6 @@ int Application::run(unsigned int width, unsigned int height, const char* window
         glfwSwapBuffers(this->currentWindow);
         glfwPollEvents();
         
-        this->inputHandler.process();
         this->render();
 
         this->fps = 1 / (glfwGetTime() - this->lastFrameTime);
@@ -30,12 +31,10 @@ int Application::run(unsigned int width, unsigned int height, const char* window
     return this->exitCode;
 }
 
-// protected
 void Application::internal_terminateGLFW() {
     glfwTerminate();
 }
 
-// private
 void Application::internal_initializeGLFW() {
     if (glfwInit() == GLFW_FALSE) {
         this->exitCode = -3;
@@ -48,7 +47,6 @@ void Application::internal_initializeGLFW() {
 }
 
 GLFWwindow* Application::internal_initializeWindow(unsigned int width, unsigned int height, const char* windowName) {
-    // GLFW Window
     GLFWwindow* window = glfwCreateWindow(width, height, windowName, NULL, NULL);
 
     if (window == NULL) {
@@ -74,11 +72,14 @@ void Application::internal_initializeGLAD() {
 }
 
 void Application::internal_initializeViewport() {
-    int width, height;
-    glfwGetWindowSize(this->currentWindow, &width, &height);
-    glViewport(0, 0, width, height);
+    glfwGetWindowSize(this->currentWindow, &this->windowWidth, &this->windowHeight);
+    glViewport(0, 0, this->windowWidth, this->windowHeight);
+}
+
+static void Application__internal__glfwStaticCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    Application::inputHandler.glfwCallback(window, key, scancode, action, mods);
 }
 
 void Application::internal_initializeInputHandler() {
-    this->inputHandler = InputHandler(this->currentWindow);
+    glfwSetKeyCallback(this->currentWindow, Application__internal__glfwStaticCallback);
 }

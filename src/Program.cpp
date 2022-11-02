@@ -7,6 +7,7 @@
 
 Program::Program() {
     this->printErrors = true;
+    this->isLinked = false;
 }
 
 Program::~Program() {

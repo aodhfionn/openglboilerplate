@@ -8,6 +8,8 @@
 
 class Application {
     public:
+        static InputHandler inputHandler;
+
         int run(unsigned int width, unsigned int height, const char* windowName);
 
         virtual void initialize() = 0;
@@ -15,9 +17,9 @@ class Application {
         virtual void terminate() = 0;
 
         GLFWwindow* currentWindow;
-        InputHandler inputHandler = NULL;
-        
         float fps;
+        int windowWidth;
+        int windowHeight;
 
     private:
         int exitCode = 0;
