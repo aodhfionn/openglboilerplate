@@ -4,7 +4,7 @@ CC=clang++
 INCLUDE_PATH=/usr/include
 
 build:
-	$(CC) glad/glad.c src/*.c* -lglfw -lGL -lfreetype -o $(OUTPUT) $(FREETYPE_FLAGS)
+	$(CC) glad/glad.c $(shell find src/ -name *.c*) -lglfw -lGL -lfreetype -o $(OUTPUT) $(FREETYPE_FLAGS)
 
 setup:
 	cp -r glad/include/* $(INCLUDE_PATH)

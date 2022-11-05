@@ -14,9 +14,10 @@ class MyTestApplication : public Application {
     public:
         unsigned int vertexBufferingObject, vertexArrayObject, elementBufferingObject;
 
-        void initialize();
-        void render();
-        void terminate();
+        void initialize() override;
+        void render() override;
+        void terminate() override;
+
     private:
         Program program;
         Shader vertexShader = Shader(GL_VERTEX_SHADER, true);

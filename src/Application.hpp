@@ -11,10 +11,13 @@ class Application {
         static InputHandler inputHandler;
 
         int run(unsigned int width, unsigned int height, const char* windowName);
+        
+        virtual void terminate() {
+            glfwTerminate();
+        }
 
         virtual void initialize() = 0;
         virtual void render() = 0;
-        virtual void terminate() = 0;
 
         GLFWwindow* currentWindow;
         float fps;
@@ -31,9 +34,6 @@ class Application {
         void internal_initializeGLAD();
         void internal_initializeViewport();
         void internal_initializeInputHandler();
-
-        // term
-        void internal_terminateGLFW();
 };
 
 #endif

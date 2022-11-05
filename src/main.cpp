@@ -75,20 +75,24 @@ void MyTestApplication::render() {
     glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    std::ifstream is("sample.txt");
-    std::string buf;
-    std::vector<std::string> strs;
+    std::wifstream is("sample.txt");
+    std::wstring buf;
+    std::vector<std::wstring> strs;
 
     while (std::getline(is, buf)) {
         strs.push_back(buf);
     }
 
-    std::string* sarr = &strs[0];
+    std::wstring* sarr = &strs[0];
 
-    this->tr->renderLines(this, sarr, strs.size(), -1.f, 0.5f, 24, 10.f);
+    this->tr->renderLines(this, sarr, strs.size(), -1.f, 0.5f, 50);
+
+    this->tr->renderString(this, L"NO WAY ❤️✌️😀😬😁😂😃😄😅😆💀", -0.5f, 0.5f, 50);
 }
 
 void MyTestApplication::terminate() {
+    Application::terminate();
+
     glDeleteBuffers(1, &vertexBufferingObject);
     glDeleteBuffers(1, &elementBufferingObject);
     glDeleteVertexArrays(1, &vertexArrayObject);

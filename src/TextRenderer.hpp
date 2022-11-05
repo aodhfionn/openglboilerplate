@@ -49,8 +49,8 @@ class TextRenderer {
 
         void loadFont(const char* fontFilePath);
         Dimensions renderCharacter(Application* app, const char c, float x, float y, unsigned int fontSize);
-        Dimensions renderString(Application* app, std::string str, float x, float y, unsigned int fontSize, float spaceWidth = 24.0f);
-        Dimensions renderLines(Application* app, std::string str[], size_t strCount, float x, float y, unsigned int fontSize, float gap);
+        Dimensions renderString(Application* app, std::wstring str, float x, float y, unsigned int fontSize, float spaceWidth = 24.0f);
+        Dimensions renderLines(Application* app, std::wstring str[], size_t strCount, float x, float y, unsigned int fontSize, float spaceWidth = 24.0f);
     
     private:
         void initializeFontFace(const char* fontFilePath);

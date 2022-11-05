@@ -26,13 +26,8 @@ int Application::run(unsigned int width, unsigned int height, const char* window
     }
     
     this->terminate();
-    this->internal_terminateGLFW();
 
     return this->exitCode;
-}
-
-void Application::internal_terminateGLFW() {
-    glfwTerminate();
 }
 
 void Application::internal_initializeGLFW() {

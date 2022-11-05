@@ -146,13 +146,13 @@ Dimensions TextRenderer::renderCharacter(Application* app, const char c, float x
     };
 }
 
-Dimensions TextRenderer::renderString(Application* app, std::string str, float x, float y, unsigned int fontSize, float gap) {
+Dimensions TextRenderer::renderString(Application* app, std::wstring str, float x, float y, unsigned int fontSize, float spaceWidth) {
     float cx = x;
     float height = 0.f;
 
     for (char c : str) {
         Dimensions d = this->renderCharacter(app, c, cx, y, fontSize);
-        cx += d.width + ((float) gap / (float) app->windowWidth / (float) fontSize);
+        cx += d.width + ((float) spaceWidth / (float) app->windowWidth / (float) fontSize);
         height = (d.height > height ? d.height : height);
     }
 
@@ -162,12 +162,12 @@ Dimensions TextRenderer::renderString(Application* app, std::string str, float x
     };
 }
 
-Dimensions TextRenderer::renderLines(Application* app, std::string str[], size_t strCount, float x, float y, unsigned int fontSize, float gap) {
+Dimensions TextRenderer::renderLines(Application* app, std::wstring str[], size_t strCount, float x, float y, unsigned int fontSize, float spaceWidth) {
     Dimensions d;
     float start = y;
 
     for (int i = 0; strCount > i; i++) {
-        Dimensions d2 = this->renderString(app, str[i], x, y, fontSize, gap);
+        Dimensions d2 = this->renderString(app, str[i], x, y, fontSize, spaceWidth);
         y -= d2.height;
 
         d.width = (d2.width > d.width ? d2.width : d.width);
